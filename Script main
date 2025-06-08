@@ -104,5 +104,5 @@ spawn(function() while task.wait(0.1) do if godmode and humanoid and humanoid.He
 
 spawn(function() while task.wait(0.05) do if noclip then for _, part in pairs(char:GetDescendants()) do if part:IsA("BasePart") and part.CanCollide == true then part.CanCollide = false end end end end end)
 
-print("✅ GAG Ultimate Mod Menu Loaded | Hotkey: " .. TOGGLE_KEY.Name) print("💡 Tip: Use minimize button or " .. TOGGLE_KEY.Name .. " to toggle UI")
+print("✅ GAG Ultimate Script Loaded | Hotkey: " .. TOGGLE_KEY.Name) print("💡 Tip: Use minimize button or " .. TOGGLE_KEY.Name .. " to toggle UI")
 
