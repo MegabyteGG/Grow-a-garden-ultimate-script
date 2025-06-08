@@ -1,0 +1,108 @@
+--// 🌱 GAG Ultimate script | ✅ Safe | 🎨 Customizable | 🔐 By MegabyteGG
+
+-- Services local Players = game:GetService("Players") local player = Players.LocalPlayer local char = player.Character or player.CharacterAdded:Wait() local humanoid = char:WaitForChild("Humanoid") local hrp = char:WaitForChild("HumanoidRootPart") local ReplicatedStorage = game:GetService("ReplicatedStorage") local UIS = game:GetService("UserInputService") local stockFolder = workspace:FindFirstChild("Stock") or workspace:FindFirstChildWhichIsA("Folder", true)
+
+-- 🛠️ Configurable Hotkey local TOGGLE_KEY = Enum.KeyCode.Tab local guiVisible = true
+
+-- Feature Flags local autofarm, autocoll, speedhack, stockpatch, moneyloop, toolspoof, godmode, noclip = false, false, false, false, false, false, false, false local theme = "Dark"
+
+-- Persistent Settings local settings = { hotkey = TOGGLE_KEY, theme = theme }
+
+-- 🎛️ GUI Setup local ScreenGui = Instance.new("ScreenGui", game.CoreGui) ScreenGui.Name = "GAGModMenu"
+
+local Frame = Instance.new("Frame", ScreenGui) Frame.Position = UDim2.new(0.05, 0, 0.2, 0) Frame.Size = UDim2.new(0, 240, 0, 400) Frame.BackgroundColor3 = Color3.fromRGB(35, 35, 35) Frame.BorderSizePixel = 0 Frame.Active = true Frame.Draggable = true
+
+local titleBar = Instance.new("Frame", Frame) titleBar.Size = UDim2.new(1, 0, 0, 25) titleBar.BackgroundColor3 = Color3.fromRGB(20, 20, 20) titleBar.BorderSizePixel = 0
+
+local titleText = Instance.new("TextLabel", titleBar) titleText.Size = UDim2.new(1, -25, 1, 0) titleText.Position = UDim2.new(0, 0, 0, 0) titleText.BackgroundTransparency = 1 titleText.Text = "🌿 GAG Mod Menu" titleText.TextColor3 = Color3.fromRGB(255, 255, 255) titleText.TextSize = 14
+
+local minimize = Instance.new("TextButton", titleBar) minimize.Size = UDim2.new(0, 25, 1, 0) minimize.Position = UDim2.new(1, -25, 0, 0) minimize.Text = "-" minimize.BackgroundColor3 = Color3.fromRGB(100, 0, 0) minimize.TextColor3 = Color3.new(1, 1, 1) minimize.BorderSizePixel = 0 minimize.MouseButton1Click:Connect(function() guiVisible = not guiVisible for _, obj in pairs(Frame:GetChildren()) do if obj ~= titleBar then obj.Visible = guiVisible end end end)
+
+local UIList = Instance.new("UIListLayout", Frame) UIList.Padding = UDim.new(0, 5) UIList.SortOrder = Enum.SortOrder.LayoutOrder UIList.FillDirection = Enum.FillDirection.Vertical UIList.VerticalAlignment = Enum.VerticalAlignment.Top UIList.HorizontalAlignment = Enum.HorizontalAlignment.Center
+
+-- 🌈 Theme Colors local themes = { ["Dark"] = Color3.fromRGB(35, 35, 35), ["Galaxy"] = Color3.fromRGB(40, 0, 80), ["Space"] = Color3.fromRGB(15, 15, 25), ["Light"] = Color3.fromRGB(200, 200, 200) }
+
+local function applyTheme(name) settings.theme = name Frame.BackgroundColor3 = themes[name] or themes["Dark"] end applyTheme(theme)
+
+-- 🔘 Button Creator local function createButton(text, callback, tip) local btn = Instance.new("TextButton", Frame) btn.Size = UDim2.new(1, -10, 0, 30) btn.Text = text btn.BackgroundColor3 = Color3.fromRGB(50, 50, 50) btn.TextColor3 = Color3.new(1,1,1) btn.BorderSizePixel = 0 btn.MouseButton1Click:Connect(callback) if tip then btn.MouseEnter:Connect(function() btn.Text = tip end) btn.MouseLeave:Connect(function() btn.Text = text end) end return btn end
+
+-- 🎮 UI Controls createButton("🌾 Toggle Auto Farm", function() autofarm = not autofarm end, "Farms plants automatically") createButton("💧 Toggle Auto Collect", function() autocoll = not autocoll end, "Collects items for you") createButton("⚡ Toggle Speed Hack", function() speedhack = not speedhack humanoid.WalkSpeed = speedhack and 75 or 16 end, "Move at super speed") createButton("📦 Apply All In Stock", function() stockpatch = true end, "Restock everything") createButton("💰 Toggle Auto Money", function() moneyloop = not moneyloop end, "Sell crops automatically") createButton("🧰 Unlock All Tools", function() toolspoof = true end, "Spawn missing tools") createButton("🛡️ Toggle God Mode", function() godmode = not godmode end, "Stay alive forever") createButton("🚪 Toggle No Clip", function() noclip = not noclip end, "Walk through anything")
+
+-- 🎨 Theme Switcher for name, _ in pairs(themes) do createButton("🎨 Theme: " .. name, function() applyTheme(name) end, "Switch to " .. name .. " theme") end
+
+-- ⌨️ Hotkey UI createButton("⌨️ Change Hotkey", function() local info = Instance.new("TextLabel", Frame) info.Size = UDim2.new(1, -10, 0, 25) info.Text = "Press any key..." info.BackgroundTransparency = 1 info.TextColor3 = Color3.new(1,1,0) UIS.InputBegan:Wait() UIS.InputBegan:Connect(function(input) if input.UserInputType == Enum.UserInputType.Keyboard then settings.hotkey = input.KeyCode TOGGLE_KEY = input.KeyCode info.Text = "✅ Hotkey changed to " .. input.KeyCode.Name wait(1) info:Destroy() end end) end, "Customize your toggle key")
+
+-- ⌨️ Toggle Handler UIS.InputBegan:Connect(function(input, gpe) if not gpe and input.KeyCode == TOGGLE_KEY then ScreenGui.Enabled = not ScreenGui.Enabled end end)
+
+-- 💤 Anti-AFK pcall(function() local vu = game:GetService("VirtualUser") player.Idled:Connect(function() vu:Button2Down(Vector2.new(0,0), workspace.CurrentCamera.CFrame) wait(1) vu:Button2Up(Vector2.new(0,0), workspace.CurrentCamera.CFrame) end) end)
+
+-- 🔁 Feature Loops spawn(function() while task.wait(0.4) do if autofarm then for _, v in pairs(workspace:GetDescendants()) do if v:IsA("ClickDetector") and v.Parent.Name:lower():find("plant") then pcall(function() fireclickdetector(v) end) end end end end end)
+
+spawn(function() while task.wait(0.5) do if autocoll then for _, obj in pairs(workspace:GetDescendants()) do if obj:IsA("TouchTransmitter") and obj.Parent:IsA("BasePart") then firetouchinterest(hrp, obj.Parent, 0) firetouchinterest(hrp, obj.Parent, 1) end end end end end)
+
+spawn(function() while task.wait(1.5) do if moneyloop then local remote = ReplicatedStorage:FindFirstChild("RemoteEvent") if remote then remote:FireServer("Sell", math.random(10, 25)) end end end end)
+
+spawn(function() while task.wait(1) do if stockpatch and stockFolder then for _, v in pairs(stockFolder:GetChildren()) do if v:IsA("BoolValue") then v.Value = true elseif v:IsA("IntValue") then v.Value = 99 end end stockpatch = false end end end)
+
+spawn(function() while task.wait(0.5) do if toolspoof then local backpack = player:WaitForChild("Backpack") local names = {"Shovel", "WateringCan", "Fertilizer", "MegaSeed"} for _, name in ipairs(names) do if not backpack:FindFirstChild(name) then local tool = Instance.new("Tool") tool.Name = name tool.RequiresHandle = false tool.CanBeDropped = false tool.Parent = backpack end end toolspoof = false end end end)
+
+spawn(function() while task.wait(0.1) do if godmode and humanoid and humanoid.Health < humanoid.MaxHealth then humanoid.Health = humanoid.MaxHealth end end end)
+
+spawn(function() while task.wait(0.05) do if noclip then for _, part in pairs(char:GetDescendants()) do if part:IsA("BasePart") and part.CanCollide == true then part.CanCollide = false end end end end end)
+
+print("✅ GAG Ultimate Mod Menu Loaded | Hotkey: " .. TOGGLE_KEY.Name) print("💡 Tip: Use minimize button or " .. TOGGLE_KEY.Name .. " to toggle UI")
+
+--// 🌱 GAG Ultimate Mod Menu UI | ✅ Safe | 🎨 Customizable | 🔐 By MegabyteGG
+
+-- Services local Players = game:GetService("Players") local player = Players.LocalPlayer local char = player.Character or player.CharacterAdded:Wait() local humanoid = char:WaitForChild("Humanoid") local hrp = char:WaitForChild("HumanoidRootPart") local ReplicatedStorage = game:GetService("ReplicatedStorage") local UIS = game:GetService("UserInputService") local stockFolder = workspace:FindFirstChild("Stock") or workspace:FindFirstChildWhichIsA("Folder", true)
+
+-- 🛠️ Configurable Hotkey local TOGGLE_KEY = Enum.KeyCode.Tab local guiVisible = true
+
+-- Feature Flags local autofarm, autocoll, speedhack, stockpatch, moneyloop, toolspoof, godmode, noclip = false, false, false, false, false, false, false, false local theme = "Dark"
+
+-- Persistent Settings local settings = { hotkey = TOGGLE_KEY, theme = theme }
+
+-- 🎛️ GUI Setup local ScreenGui = Instance.new("ScreenGui", game.CoreGui) ScreenGui.Name = "GAGModMenu"
+
+local Frame = Instance.new("Frame", ScreenGui) Frame.Position = UDim2.new(0.05, 0, 0.2, 0) Frame.Size = UDim2.new(0, 240, 0, 400) Frame.BackgroundColor3 = Color3.fromRGB(35, 35, 35) Frame.BorderSizePixel = 0 Frame.Active = true Frame.Draggable = true
+
+local titleBar = Instance.new("Frame", Frame) titleBar.Size = UDim2.new(1, 0, 0, 25) titleBar.BackgroundColor3 = Color3.fromRGB(20, 20, 20) titleBar.BorderSizePixel = 0
+
+local titleText = Instance.new("TextLabel", titleBar) titleText.Size = UDim2.new(1, -25, 1, 0) titleText.Position = UDim2.new(0, 0, 0, 0) titleText.BackgroundTransparency = 1 titleText.Text = "🌿 GAG Mod Menu" titleText.TextColor3 = Color3.fromRGB(255, 255, 255) titleText.TextSize = 14
+
+local minimize = Instance.new("TextButton", titleBar) minimize.Size = UDim2.new(0, 25, 1, 0) minimize.Position = UDim2.new(1, -25, 0, 0) minimize.Text = "-" minimize.BackgroundColor3 = Color3.fromRGB(100, 0, 0) minimize.TextColor3 = Color3.new(1, 1, 1) minimize.BorderSizePixel = 0 minimize.MouseButton1Click:Connect(function() guiVisible = not guiVisible for _, obj in pairs(Frame:GetChildren()) do if obj ~= titleBar then obj.Visible = guiVisible end end end)
+
+local UIList = Instance.new("UIListLayout", Frame) UIList.Padding = UDim.new(0, 5) UIList.SortOrder = Enum.SortOrder.LayoutOrder UIList.FillDirection = Enum.FillDirection.Vertical UIList.VerticalAlignment = Enum.VerticalAlignment.Top UIList.HorizontalAlignment = Enum.HorizontalAlignment.Center
+
+-- 🌈 Theme Colors local themes = { ["Dark"] = Color3.fromRGB(35, 35, 35), ["Galaxy"] = Color3.fromRGB(40, 0, 80), ["Space"] = Color3.fromRGB(15, 15, 25), ["Light"] = Color3.fromRGB(200, 200, 200) }
+
+local function applyTheme(name) settings.theme = name Frame.BackgroundColor3 = themes[name] or themes["Dark"] end applyTheme(theme)
+
+-- 🔘 Button Creator local function createButton(text, callback, tip) local btn = Instance.new("TextButton", Frame) btn.Size = UDim2.new(1, -10, 0, 30) btn.Text = text btn.BackgroundColor3 = Color3.fromRGB(50, 50, 50) btn.TextColor3 = Color3.new(1,1,1) btn.BorderSizePixel = 0 btn.MouseButton1Click:Connect(callback) if tip then btn.MouseEnter:Connect(function() btn.Text = tip end) btn.MouseLeave:Connect(function() btn.Text = text end) end return btn end
+
+-- 🎮 UI Controls createButton("🌾 Toggle Auto Farm", function() autofarm = not autofarm end, "Farms plants automatically") createButton("💧 Toggle Auto Collect", function() autocoll = not autocoll end, "Collects items for you") createButton("⚡ Toggle Speed Hack", function() speedhack = not speedhack humanoid.WalkSpeed = speedhack and 75 or 16 end, "Move at super speed") createButton("📦 Apply All In Stock", function() stockpatch = true end, "Restock everything") createButton("💰 Toggle Auto Money", function() moneyloop = not moneyloop end, "Sell crops automatically") createButton("🧰 Unlock All Tools", function() toolspoof = true end, "Spawn missing tools") createButton("🛡️ Toggle God Mode", function() godmode = not godmode end, "Stay alive forever") createButton("🚪 Toggle No Clip", function() noclip = not noclip end, "Walk through anything")
+
+-- 🎨 Theme Switcher for name, _ in pairs(themes) do createButton("🎨 Theme: " .. name, function() applyTheme(name) end, "Switch to " .. name .. " theme") end
+
+-- ⌨️ Hotkey UI createButton("⌨️ Change Hotkey", function() local info = Instance.new("TextLabel", Frame) info.Size = UDim2.new(1, -10, 0, 25) info.Text = "Press any key..." info.BackgroundTransparency = 1 info.TextColor3 = Color3.new(1,1,0) UIS.InputBegan:Wait() UIS.InputBegan:Connect(function(input) if input.UserInputType == Enum.UserInputType.Keyboard then settings.hotkey = input.KeyCode TOGGLE_KEY = input.KeyCode info.Text = "✅ Hotkey changed to " .. input.KeyCode.Name wait(1) info:Destroy() end end) end, "Customize your toggle key")
+
+-- ⌨️ Toggle Handler UIS.InputBegan:Connect(function(input, gpe) if not gpe and input.KeyCode == TOGGLE_KEY then ScreenGui.Enabled = not ScreenGui.Enabled end end)
+
+-- 💤 Anti-AFK pcall(function() local vu = game:GetService("VirtualUser") player.Idled:Connect(function() vu:Button2Down(Vector2.new(0,0), workspace.CurrentCamera.CFrame) wait(1) vu:Button2Up(Vector2.new(0,0), workspace.CurrentCamera.CFrame) end) end)
+
+-- 🔁 Feature Loops spawn(function() while task.wait(0.4) do if autofarm then for _, v in pairs(workspace:GetDescendants()) do if v:IsA("ClickDetector") and v.Parent.Name:lower():find("plant") then pcall(function() fireclickdetector(v) end) end end end end end)
+
+spawn(function() while task.wait(0.5) do if autocoll then for _, obj in pairs(workspace:GetDescendants()) do if obj:IsA("TouchTransmitter") and obj.Parent:IsA("BasePart") then firetouchinterest(hrp, obj.Parent, 0) firetouchinterest(hrp, obj.Parent, 1) end end end end end)
+
+spawn(function() while task.wait(1.5) do if moneyloop then local remote = ReplicatedStorage:FindFirstChild("RemoteEvent") if remote then remote:FireServer("Sell", math.random(10, 25)) end end end end)
+
+spawn(function() while task.wait(1) do if stockpatch and stockFolder then for _, v in pairs(stockFolder:GetChildren()) do if v:IsA("BoolValue") then v.Value = true elseif v:IsA("IntValue") then v.Value = 99 end end stockpatch = false end end end)
+
+spawn(function() while task.wait(0.5) do if toolspoof then local backpack = player:WaitForChild("Backpack") local names = {"Shovel", "WateringCan", "Fertilizer", "MegaSeed"} for _, name in ipairs(names) do if not backpack:FindFirstChild(name) then local tool = Instance.new("Tool") tool.Name = name tool.RequiresHandle = false tool.CanBeDropped = false tool.Parent = backpack end end toolspoof = false end end end)
+
+spawn(function() while task.wait(0.1) do if godmode and humanoid and humanoid.Health < humanoid.MaxHealth then humanoid.Health = humanoid.MaxHealth end end end)
+
+spawn(function() while task.wait(0.05) do if noclip then for _, part in pairs(char:GetDescendants()) do if part:IsA("BasePart") and part.CanCollide == true then part.CanCollide = false end end end end end)
+
+print("✅ GAG Ultimate Mod Menu Loaded | Hotkey: " .. TOGGLE_KEY.Name) print("💡 Tip: Use minimize button or " .. TOGGLE_KEY.Name .. " to toggle UI")
+
