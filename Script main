@@ -50,9 +50,9 @@ spawn(function() while task.wait(0.1) do if godmode and humanoid and humanoid.He
 
 spawn(function() while task.wait(0.05) do if noclip then for _, part in pairs(char:GetDescendants()) do if part:IsA("BasePart") and part.CanCollide == true then part.CanCollide = false end end end end end)
 
-print("✅ GAG Ultimate Mod Menu Loaded | Hotkey: " .. TOGGLE_KEY.Name) print("💡 Tip: Use minimize button or " .. TOGGLE_KEY.Name .. " to toggle UI")
+print("✅ GAG Ultimate script Loaded | Hotkey: " .. TOGGLE_KEY.Name) print("💡 Tip: Use minimize button or " .. TOGGLE_KEY.Name .. " to toggle UI")
 
---// 🌱 GAG Ultimate Mod Menu UI | ✅ Safe | 🎨 Customizable | 🔐 By MegabyteGG
+--// 🌱 GAG Ultimate script UI | ✅ Safe | 🎨 Customizable | 🔐 By MegabyteGG
 
 -- Services local Players = game:GetService("Players") local player = Players.LocalPlayer local char = player.Character or player.CharacterAdded:Wait() local humanoid = char:WaitForChild("Humanoid") local hrp = char:WaitForChild("HumanoidRootPart") local ReplicatedStorage = game:GetService("ReplicatedStorage") local UIS = game:GetService("UserInputService") local stockFolder = workspace:FindFirstChild("Stock") or workspace:FindFirstChildWhichIsA("Folder", true)
 
